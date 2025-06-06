@@ -6,7 +6,6 @@ async function loadPendingCharities() {
     const res = await axios.get(`${endpoint}/pending`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-
     const container = document.getElementById('pending-charities');
     container.innerHTML = '';
 

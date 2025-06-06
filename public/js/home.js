@@ -38,6 +38,7 @@ async function donate(charityId) {
                     });
                     alert('Donation successful!');
                     loadDonationSummary();
+                    loadDonationHistory();
                 } catch (err) {
                     console.error('Failed to verify donation', err);
                     alert('Donation verification failed');
@@ -64,15 +65,14 @@ async function loadDonationSummary() {
     try {
         const res = await axios.get(`${endpoint}/donation-summary`);
         const charities = res.data;
-        console.log(charities);
         const listDiv = document.getElementById('charity-list');
         listDiv.innerHTML = '';
 
         charities.forEach(charity => {
             const div = document.createElement('div');
             div.innerHTML = `
-  <div class="card h-100 shadow-sm">
-    <div class="card-body">
+     <div class="card h-100 shadow-sm">
+     <div class="card-body">
       <h5 class="card-title">${charity.name}</h5>
       <p class="card-text">${charity.description}</p>
       <p class="text-muted"><strong>Location:</strong> ${charity.location}</p>
@@ -86,7 +86,8 @@ async function loadDonationSummary() {
           ${charity.progress.toFixed(1)}%
         </div>
         </div>
-      <button class="btn btn-success btn-sm mt-2">Donate</button>
+        <input type="number" id="amount-${charity.id}" class="form-control form-control-sm mt-2" placeholder="Enter amount" />
+       <button class="btn btn-success btn-sm mt-2" onclick="donate(${charity.id})">Donate</button>
     </div>
   </div>
 `;
@@ -103,7 +104,6 @@ async function loadDonationHistory() {
         });
 
         const donations = res.data;
-
         const historyDiv = document.getElementById('donation-history');
         historyDiv.innerHTML = '';
 
@@ -111,20 +111,27 @@ async function loadDonationHistory() {
             historyDiv.innerHTML = '<p>No donations made yet.</p>';
             return;
         }
+
         donations.forEach(donation => {
             const div = document.createElement('div');
             div.innerHTML = `
-        <p>Charity: ${donation.Charity.name}</p>
-        <p>Amount: ₹${donation.amount}</p>
-        <p>Date: ${new Date(donation.createdAt).toLocaleDateString()}</p>
-        <hr>
-      `;
+                <p>Charity: ${donation.Charity.name}</p>
+                <p>Amount: ₹${donation.amount}</p>
+                <p>Date: ${new Date(donation.createdAt).toLocaleDateString()}</p>
+                ${donation.status === 'SUCCESS' ? `<button onclick="downloadReceipt(${donation.id})">Download Receipt</button>` : '<p>Status: ' + donation.status + '</p>'}
+                <hr>
+            `;
             historyDiv.appendChild(div);
         });
     } catch (err) {
         console.log('Failed to load donation history', err);
     }
 }
+
+function downloadReceipt(donationId) {
+    window.open(`${endpoint}/receipt/${donationId}`, '_blank');
+}
+
 async function applyFilters() {
     const name = document.getElementById('filter-name').value;
     const category = document.getElementById('filter-category').value;
@@ -135,7 +142,6 @@ async function applyFilters() {
             params: { name, category, location }
         });
         const charities = res.data;
-        console.log(charities);
         const listDiv = document.getElementById('charity-list');
         listDiv.innerHTML = '';
         charities.forEach(charity => {
@@ -148,7 +154,8 @@ async function applyFilters() {
       <p class="text-muted"><strong>Location:</strong> ${charity.location}</p>
       <p class="text-muted"><strong>Category:</strong> ${charity.category}</p>
       <p class="text-muted"><strong>Goal:</strong> ₹${charity.goal_amount}</p>
-      <button class="btn btn-success btn-sm">Donate</button>
+      <input type="number" id="amount-${charity.id}" class="form-control form-control-sm mt-2" placeholder="Enter amount" />
+      <button class="btn btn-success btn-sm" onclick=donate(${charity.id})>Donate</button>
     </div>
   </div>
 `;
@@ -158,9 +165,5 @@ async function applyFilters() {
         console.error('Failed to filter charities', err);
     }
 }
-const updateProfileBtn = document.getElementById("update-profile-btn");
-updateProfileBtn.addEventListener("click", () => {
-    window.location.href = "../profile.html";
-});
 loadDonationSummary();
 loadDonationHistory();

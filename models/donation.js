@@ -24,6 +24,12 @@ const Donation = sequelize.define('donation', {
   amount: {
     type: Sequelize.FLOAT,
     allowNull: false,
+  },
+  userId:{
+    type:Sequelize.INTEGER,
+  },
+  CharityId:{
+    type:Sequelize.INTEGER,
   }
 });
 

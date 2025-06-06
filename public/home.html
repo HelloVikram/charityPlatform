@@ -15,56 +15,79 @@
       class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow"
     >
       <div class="container">
-        <a class="navbar-brand fw-bold" href="#">🌟 Charity Platform</a>
+        <a class="navbar-brand fw-bold" href="#"> Charity Platform</a>
       </div>
-      <button
-      class="btn btn-light ms-auto"
-      id="update-profile-btn"
-      type="button"
-    >
-      Update Profile
-    </button>
+      <div class="d-flex gap-2">
+        <a href="profile.html" class="btn btn-outline-light">Update Profile</a>
+        <a href="charity.html" class="btn btn-light">Register Charity</a>
+      </div>
     </nav>
     <div class="container" style="margin-top: 100px">
-      <div class="bg-light p-4 rounded shadow-sm mb-4">
-        <h4 class="mb-3">Filter Charities</h4>
-        <div class="row gy-3 gx-3 align-items-end">
-          <div class="col-md-4">
-            <label for="filter-name" class="form-label">Name</label>
-            <input
-              type="text"
-              id="filter-name"
-              class="form-control"
-              placeholder="Search by name"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="filter-category" class="form-label">Category</label>
-            <input
-              type="text"
-              id="filter-category"
-              class="form-control"
-              placeholder="Search by category"
-            />
-          </div>
-          <div class="col-md-4">
-            <label for="filter-location" class="form-label">Location</label>
-            <input
-              type="text"
-              id="filter-location"
-              class="form-control"
-              placeholder="Search by location"
-            />
-          </div>
-          <div class="col-12 text-end">
-            <button onclick="applyFilters()" class="btn btn-primary mt-3">
-              Apply Filters
+      <div class="accordion mb-4" id="filterAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="filterHeading">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#filterCollapse"
+              aria-expanded="false"
+              aria-controls="filterCollapse"
+            >
+              🔍 Filter Charities
             </button>
+          </h2>
+          <div
+            id="filterCollapse"
+            class="accordion-collapse collapse"
+            aria-labelledby="filterHeading"
+            data-bs-parent="#filterAccordion"
+          >
+            <div class="accordion-body">
+              <div class="row gy-2 gx-3 align-items-end">
+                <div class="col-md-4">
+                  <label for="filter-name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    id="filter-name"
+                    class="form-control"
+                    placeholder="Search by name"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label for="filter-category" class="form-label"
+                    >Category</label
+                  >
+                  <input
+                    type="text"
+                    id="filter-category"
+                    class="form-control"
+                    placeholder="Search by category"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label for="filter-location" class="form-label"
+                    >Location</label
+                  >
+                  <input
+                    type="text"
+                    id="filter-location"
+                    class="form-control"
+                    placeholder="Search by location"
+                  />
+                </div>
+                <div class="col-12 text-end mt-3">
+                  <button onclick="applyFilters()" class="btn btn-primary">
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <h2 class="mb-4">✅ Approved Charities</h2>
+      <h2 class="mb-4"> Approved Charities</h2>
       <div
         id="charity-list"
         class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
@@ -91,8 +114,7 @@
               aria-labelledby="headingOne"
               data-bs-parent="#donationAccordion"
             >
-              <div class="accordion-body" id="donation-history">
-              </div>
+              <div class="accordion-body" id="donation-history"></div>
             </div>
           </div>
         </div>

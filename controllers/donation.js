@@ -2,7 +2,6 @@ const Razorpay = require('razorpay');
 
 const donation = require('../models/donation');
 const Charities = require('../models/Charities');
-const User = require('../models/User');
 
 const rzp = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -27,7 +26,7 @@ const createDonationOrder = async (req, res) => {
         await donation.create({
             amount,
             CharityId: charityId,
-            UserId: req.user.id,
+            userId: req.user.id,
             orderId: order.id,
         });
 
@@ -48,7 +47,7 @@ const verifyDonation = async (req, res) => {
         }
 
         Donation.paymentId = paymentId;
-        Donation.status = status === 'success' ? 'SUCCESS' : 'FAILED';
+        Donation.status = status == 'success' ? 'SUCCESS' : 'FAILED';
         await Donation.save();
 
         res.json({ message: 'Donation status updated successfully' });
@@ -61,7 +60,7 @@ const userHistory = async (req, res) => {
     try {
         const userId = req.user.id;
         const donationHistory = await donation.findAll({
-            where: { userId,status:'success' }, 
+            where: { userId,status:'SUCCESS' }, 
             include: [{
                 model: Charities, 
                 attributes: ['id', 'name',] 

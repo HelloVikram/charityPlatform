@@ -35,6 +35,9 @@ const Charities = sequelize.define('Charities', {
   isApproved: {
   type: Sequelize.BOOLEAN,
   defaultValue: false,
+},
+userId:{
+  type:Sequelize.INTEGER
 }
 });
 
